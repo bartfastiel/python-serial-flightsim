@@ -12,14 +12,11 @@ screen = pygame.display.set_mode((width, height))
 # Set the color (black in RGB)
 black = (0, 0, 0)
 
-# Define the line's starting and ending points
-start_point = (100, 300)
-end_point = (700, 300)
-
 # Set the line width
 line_width = 5
 
-ser = serial.Serial('COM4', 9600)
+arduino = serial.Serial('COM4', 9600)
+intValue = 0
 
 running = True
 while running:
@@ -31,12 +28,12 @@ while running:
     screen.fill((255, 255, 255))
 
     # Read the serial port
-    readline = ser.readline()
+    readline = arduino.readline()
     # Try to parse as int
     try:
         intValue = int(readline)
     except ValueError:
-        intValue = 0
+        pass
     print(intValue)
 
     # move end_point up, start_point down
