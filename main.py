@@ -19,6 +19,9 @@ line_width = 5
 arduino = serial.Serial('COM4', 9600)
 intValue = 0
 
+start_zeit = pygame.time.get_ticks()
+print(start_zeit)
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -29,11 +32,16 @@ while running:
     screen.fill((255, 255, 255))
 
     # Draw horizon
-    pygame.draw.line(screen, grey, (5, 300), (790, 300), line_width)
+    pygame.draw.line(screen, grey, (5, 300), (790, 300), 1)
+
+    zeit_innerhalb_des_spiels = pygame.time.get_ticks() - start_zeit
+    zeit_innerhalb_der_untergrund_animation = zeit_innerhalb_des_spiels % 1000
 
     # 10 Linien, die sich langsam nach unten bewegen
     for i in range(10):
-        pygame.draw.line(screen, grey, (5, 300 + i * i * 5), (790, 300 + i * i * 5), 3)
+        n = (i + zeit_innerhalb_der_untergrund_animation / 1000)
+        y = 300 + n * n * 5
+        pygame.draw.line(screen, grey, (5, y), (790, y), int(n))
 
     # Read the serial port
     readline = arduino.readline()
@@ -42,7 +50,6 @@ while running:
         intValue = int(readline)
     except ValueError:
         pass
-    print(intValue)
 
     # move end_point up, start_point down
     start_point = (100, 300 + intValue - 512)
