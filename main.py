@@ -15,6 +15,7 @@ grey = (128, 128, 128)
 
 arduino = serial.Serial('COM4', 9600)
 poti = 0
+poti_signed = 0
 
 start_zeit = pygame.time.get_ticks()
 print(start_zeit)
