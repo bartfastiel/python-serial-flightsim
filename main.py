@@ -21,6 +21,7 @@ intValue = 0
 
 start_zeit = pygame.time.get_ticks()
 print(start_zeit)
+airplane = pygame.image.load("Airplane-from-behind.svg")
 
 running = True
 while running:
@@ -57,6 +58,10 @@ while running:
 
     # Draw the black horizontal line
     pygame.draw.line(screen, black, start_point, end_point, line_width)
+
+    # Zeichne Bild Airplane-from-behind.svg auf den Schirm
+    airplane = pygame.transform.scale(airplane, (100, 100))
+    screen.blit(airplane, (300, 300))
 
     # Update the screen
     pygame.display.flip()
