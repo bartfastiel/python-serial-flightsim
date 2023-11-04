@@ -17,7 +17,7 @@ grey = (128, 128, 128)
 line_width = 5
 
 arduino = serial.Serial('COM4', 9600)
-intValue = 0
+poti = 0
 
 start_zeit = pygame.time.get_ticks()
 print(start_zeit)
@@ -49,20 +49,25 @@ while running:
     readline = arduino.readline()
     # Try to parse as int
     try:
-        intValue = int(readline)
+        poti = int(readline)
     except ValueError:
         pass
 
     # move end_point up, start_point down
-    start_point = (100, 300 + intValue - 512)
-    end_point = (700, 300 - intValue + 512)
+    poti_signed = poti - 512
+    start_point = (100, 300 + poti_signed)
+    end_point = (700, 300 - poti_signed + 1024)
 
     # Draw the black horizontal line
     pygame.draw.line(screen, black, start_point, end_point, line_width)
 
     # Zeichne Bild Airplane-from-behind.svg auf den Schirm
     centered_airplane = (width / 2 - size_of_airplane[0] / 2, height / 2 - size_of_airplane[1] / 2)
-    screen.blit(airplane, centered_airplane)
+
+    # Drehe Flugzeug um den Winkel intValue
+    airplane_rotated = pygame.transform.rotate(airplane, poti_signed / 32)
+
+    screen.blit(airplane_rotated, centered_airplane)
 
     # Update the screen
     pygame.display.flip()
