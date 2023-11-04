@@ -1,8 +1,53 @@
+import pygame
+import sys
 import serial
+
+# Initialize pygame
+pygame.init()
+
+# Set the screen dimensions
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+
+# Set the color (black in RGB)
+black = (0, 0, 0)
+
+# Define the line's starting and ending points
+start_point = (100, 300)
+end_point = (700, 300)
+
+# Set the line width
+line_width = 5
 
 ser = serial.Serial('COM4', 9600)
 
-while True:
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Clear the screen
+    screen.fill((255, 255, 255))
+
+    # Read the serial port
     readline = ser.readline()
-    intValue = int(readline)
+    # Try to parse as int
+    try:
+        intValue = int(readline)
+    except ValueError:
+        intValue = 0
     print(intValue)
+
+    # move end_point up, start_point down
+    start_point = (100, 300 + intValue - 512)
+    end_point = (700, 300 - intValue + 512)
+
+    # Draw the black horizontal line
+    pygame.draw.line(screen, black, start_point, end_point, line_width)
+
+    # Update the screen
+    pygame.display.flip()
+
+pygame.quit()
+sys.exit()
