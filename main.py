@@ -11,6 +11,7 @@ screen = pygame.display.set_mode((width, height))
 
 # Set the color (black in RGB)
 black = (0, 0, 0)
+grey = (128, 128, 128)
 
 # Set the line width
 line_width = 5
@@ -26,6 +27,9 @@ while running:
 
     # Clear the screen
     screen.fill((255, 255, 255))
+
+    # Draw horizon
+    pygame.draw.line(screen, grey, (5, 300), (790, 300), line_width)
 
     # Read the serial port
     readline = arduino.readline()
