@@ -19,7 +19,6 @@ poti = 0
 start_zeit = pygame.time.get_ticks()
 print(start_zeit)
 airplane = pygame.image.load("Airplane-from-behind.svg")
-size_of_airplane = airplane.get_size()
 
 running = True
 while running:
@@ -50,8 +49,9 @@ while running:
     except ValueError:
         pass
 
-    centered_airplane = (width / 2 - size_of_airplane[0] / 2, height / 2 - size_of_airplane[1] / 2)
     airplane_rotated = pygame.transform.rotate(airplane, poti_signed / 32)
+    size_of_airplane = airplane_rotated.get_size()
+    centered_airplane = (width / 2 - size_of_airplane[0] / 2, height / 2 - size_of_airplane[1] / 2)
     screen.blit(airplane_rotated, centered_airplane)
 
     # Update the screen
