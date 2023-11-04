@@ -31,6 +31,10 @@ while running:
     # Draw horizon
     pygame.draw.line(screen, grey, (5, 300), (790, 300), line_width)
 
+    # 10 Linien, die sich langsam nach unten bewegen
+    for i in range(10):
+        pygame.draw.line(screen, grey, (5, 300 + i * i * 5), (790, 300 + i * i * 5), 3)
+
     # Read the serial port
     readline = arduino.readline()
     # Try to parse as int
