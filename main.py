@@ -2,6 +2,12 @@ import pygame
 import sys
 import serial
 
+try:
+    arduino = serial.Serial('COM4', 9600)
+except serial.SerialException:
+    print("Arduino not found!")
+    sys.exit()
+
 # Initialize pygame
 pygame.init()
 
@@ -13,7 +19,6 @@ screen = pygame.display.set_mode((width, height))
 black = (0, 0, 0)
 grey = (128, 128, 128)
 
-arduino = serial.Serial('COM4', 9600)
 poti = 0
 poti_signed = 0
 
