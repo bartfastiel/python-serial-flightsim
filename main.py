@@ -1,3 +1,4 @@
+import np as np
 import pygame
 import sys
 import serial
@@ -40,6 +41,21 @@ while running:
 
     zeit_innerhalb_des_spiels = pygame.time.get_ticks() - start_zeit
     zeit_innerhalb_der_untergrund_animation = zeit_innerhalb_des_spiels % 1000
+
+    # schwarzes Rechteck (Gebäude), über dem Horizont
+    # über ein drittel des himmels
+    # allokiere eine liste mit 800 integern
+
+    buffer = np.zeros(800, dtype=int)
+    buildingsize =30
+    buildingdist = 3
+    for i in range(800):
+        if i % (buildingsize + buildingdist) < buildingsize:
+            buffer[i] = 50
+
+    # draw the buffer as a line in the middle of the screen
+    for i in range(800):
+        pygame.draw.line(screen, black, (i, 300), (i, 300 - buffer[i]), 1)
 
     # 10 Linien, die sich langsam nach unten bewegen
     for i in range(10):
