@@ -9,6 +9,7 @@ except serial.SerialException:
     print("Arduino not found!")
     sys.exit()
 
+
 # Initialize pygame
 pygame.init()
 
@@ -28,6 +29,13 @@ print(start_zeit)
 airplane = pygame.image.load("Airplane-from-behind.svg")
 
 running = True
+buffer = np.zeros(width * 4, dtype=int)
+buildingsize =30
+buildingdist = 90
+for i in range(len(buffer)):
+    if i % (buildingsize + buildingdist) < buildingsize:
+        buffer[i] = 50
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -46,15 +54,13 @@ while running:
     # über ein drittel des himmels
     # allokiere eine liste mit 800 integern
 
-    buffer = np.zeros(800, dtype=int)
-    buildingsize =30
-    buildingdist = 3
-    for i in range(800):
-        if i % (buildingsize + buildingdist) < buildingsize:
-            buffer[i] = 50
-
+    rotation = int(poti_signed / 32)
+    # rotate skyline buildings in buffer
+    buffer = np.roll(buffer, rotation)
+    # what does np.roll do  ?
+    # https://numpy.org/doc/stable/reference/generated/numpy.roll.html
     # draw the buffer as a line in the middle of the screen
-    for i in range(800):
+    for i in range(len(buffer)):
         pygame.draw.line(screen, black, (i, 300), (i, 300 - buffer[i]), 1)
 
     # 10 Linien, die sich langsam nach unten bewegen
