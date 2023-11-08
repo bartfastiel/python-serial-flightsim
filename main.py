@@ -1,49 +1,52 @@
-import np as np
+import np
 import pygame
 import sys
 import serial
 
+# Arduino verbinden
 try:
     arduino = serial.Serial('COM4', 9600)
 except serial.SerialException:
     print("Arduino not found!")
     sys.exit()
+poti = 0
+poti_signed = 0
 
-# Initialize pygame
+# Spiel starten
 pygame.init()
+running = True
 
 # Ganzer Bildschirm
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 width = screen.get_width()
 height = screen.get_height()
 
-# Set the color (black in RGB)
+# Farben
 black = (0, 0, 0)
 grey = (128, 128, 128)
 
-poti = 0
-poti_signed = 0
-
+# Zeit
 start_zeit = pygame.time.get_ticks()
-print(start_zeit)
+
+# Bild laden
 airplane = pygame.image.load("Airplane-from-behind.svg")
 
-running = True
-buffer = np.zeros(width * 4, dtype=int)
-buildingsize = 30
-buildingdist = 90
-buildingheight = 0
-minsize = 10
-for i in range(len(buffer)):
-    if buildingheight > 0:
-        buildingsize = buildingsize + 1
-        buffer[i] = buildingheight
-        if buildingsize > minsize and np.random.randint(0, 100) < 20:
-            buildingheight = 0
-            buildingsize = 0
-    if buildingheight == 0:
+# Gebäude zeichnen
+stadt = np.zeros(width * 4, dtype=int)
+haus_groesse = 0
+haus_abstand = 90
+mindest_hoehe = 10
+haus_hoehe = 0
+for i in range(len(stadt)):
+    if haus_hoehe > 0:
+        haus_groesse = haus_groesse + 1
+        stadt[i] = haus_hoehe
+        if haus_groesse > mindest_hoehe and np.random.randint(0, 100) < 20:
+            haus_hoehe = 0
+            haus_groesse = 0
+    if haus_hoehe == 0:
         if np.random.randint(0, 100) < 10:
-            buildingheight = np.random.randint(30, 100)
+            haus_hoehe = np.random.randint(30, 100)
 
 while running:
     for event in pygame.event.get():
@@ -65,12 +68,12 @@ while running:
 
     rotation = int(poti_signed / 32)
     # rotate skyline buildings in buffer
-    buffer = np.roll(buffer, rotation)
+    stadt = np.roll(stadt, rotation)
     # what does np.roll do  ?
     # https://numpy.org/doc/stable/reference/generated/numpy.roll.html
     # draw the buffer as a line in the middle of the screen
-    for i in range(len(buffer)):
-        pygame.draw.line(screen, black, (i, height / 2), (i, height / 2 - buffer[i]), 1)
+    for i in range(len(stadt)):
+        pygame.draw.line(screen, black, (i, height / 2), (i, height / 2 - stadt[i]), 1)
 
     # 10 Linien, die sich langsam nach unten bewegen
     for i in range(10):
