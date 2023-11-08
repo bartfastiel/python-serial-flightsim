@@ -9,7 +9,6 @@ except serial.SerialException:
     print("Arduino not found!")
     sys.exit()
 
-
 # Initialize pygame
 pygame.init()
 
@@ -30,7 +29,7 @@ airplane = pygame.image.load("Airplane-from-behind.svg")
 
 running = True
 buffer = np.zeros(width * 4, dtype=int)
-buildingsize =30
+buildingsize = 30
 buildingdist = 90
 buildingheight = 0
 minsize = 10
@@ -38,12 +37,12 @@ for i in range(len(buffer)):
     if buildingheight > 0:
         buildingsize = buildingsize + 1
         buffer[i] = buildingheight
-        if buildingsize> minsize and np.random.randint(0, 100) < 20:
+        if buildingsize > minsize and np.random.randint(0, 100) < 20:
             buildingheight = 0
             buildingsize = 0
     if buildingheight == 0:
-        if np.random.randint(0, 100) < 20:
-            buildingheight = np.random.randint(0, 100)
+        if np.random.randint(0, 100) < 10:
+            buildingheight = np.random.randint(30, 100)
 
 while running:
     for event in pygame.event.get():
