@@ -12,9 +12,10 @@ except serial.SerialException:
 # Initialize pygame
 pygame.init()
 
-# Set the screen dimensions
-width, height = 800, 600
-screen = pygame.display.set_mode((width, height))
+# Ganzer Bildschirm
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+width = screen.get_width()
+height = screen.get_height()
 
 # Set the color (black in RGB)
 black = (0, 0, 0)
@@ -53,7 +54,7 @@ while running:
     screen.fill((255, 255, 255))
 
     # Draw horizon
-    pygame.draw.line(screen, grey, (5, 300), (790, 300), 1)
+    pygame.draw.line(screen, grey, (0, height / 2), (width, height / 2), 1)
 
     zeit_innerhalb_des_spiels = pygame.time.get_ticks() - start_zeit
     zeit_innerhalb_der_untergrund_animation = zeit_innerhalb_des_spiels % 1000
@@ -69,13 +70,13 @@ while running:
     # https://numpy.org/doc/stable/reference/generated/numpy.roll.html
     # draw the buffer as a line in the middle of the screen
     for i in range(len(buffer)):
-        pygame.draw.line(screen, black, (i, 300), (i, 300 - buffer[i]), 1)
+        pygame.draw.line(screen, black, (i, height / 2), (i, height / 2 - buffer[i]), 1)
 
     # 10 Linien, die sich langsam nach unten bewegen
     for i in range(10):
         n = (i + zeit_innerhalb_der_untergrund_animation / 1000)
-        y = 300 + n * n * 5
-        pygame.draw.line(screen, grey, (5, y), (790, y), int(n))
+        y = height / 2 + n * n * 5
+        pygame.draw.line(screen, grey, (0, y), (width, y), int(n))
 
     # Read the serial port
     readline = arduino.readline()
